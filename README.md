@@ -8,3 +8,5 @@ The camera is exposed as a camera
 The LCD simply displays the date and time from home assistant
 NOTE that you will need to install a font file (times-new-roman.ttf) in the fonts/ directory
 There are two font entries in my yaml - these are the same font, but in two different sizes as I have the date displayed smaller
+
+Note the I2C setup is used by the LCD
