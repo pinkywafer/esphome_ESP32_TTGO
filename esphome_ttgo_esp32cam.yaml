@@ -1,13 +1,19 @@
+# Edit the device name, friendly name and IP address (for manual IP)
+# If you want to use DHCP, you will need to make more alterations to the wifi section
 substitutions:
   devicename: ttgocam
   friendly_name: test esp32cam
   ip_address: 192.168.1.230
-
+  
+# sets up the device
 esphome:
   name: $devicename
   platform: ESP32
   board: esp-wrover-kit
 
+# set up wifi
+# CHANGE the gateway to suit your network
+# NOTE I am using secrets for SSID and Password
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_psk
@@ -23,14 +29,17 @@ logger:
 # Enable Home Assistant API
 api:
 
+# Enable OTA
 ota:
 
+# PIR motion sensor 
 binary_sensor:
   - platform: gpio
     pin: GPIO33
     name: $friendly_name PIR
     device_class: motion
 
+# Binary sensor for button - is named {friendly name} Button
   - platform: gpio
     pin:
       number: GPIO34
@@ -38,16 +47,20 @@ binary_sensor:
       inverted: True
     name: $friendly_name Button
 
+# board status sensor
   - platform: status
     name: $friendly_name Status
 
 sensor:
+# wifi signal sensor
   - platform: wifi_signal
     name: $friendly_name WiFi Signal
     update_interval: 10s
+# uptime sensor
   - platform: uptime
     name: $friendly_name Uptime
 
+# Camera
 esp32_camera:
   name: $friendly_name Camera
   external_clock:
@@ -66,10 +79,12 @@ esp32_camera:
   vertical_flip: false
   horizontal_mirror: false
 
+# I2c for LCD
 i2c:
   sda: GPIO21
   scl: GPIO22
 
+# Fonts used for display (NOTE Files needed)
 font:
   - file: "fonts/times-new-roman.ttf"
     id: tnr1
@@ -78,10 +93,12 @@ font:
     id: tnr2
     size: 35
 
+# pull time from home assistant
 time:
   - platform: homeassistant
     id: homeassistant_time
 
+# set up and display time and date on LCD
 display:
   - platform: ssd1306_i2c
     model: "SSD1306 128x64"
